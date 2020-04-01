@@ -1,0 +1,54 @@
+#include<stdio.h> 
+#include<stdlib.h>
+void main()
+{
+int burst[20],p[20],waiting[20],turnat[20], n ,total=0,pos,temp;
+int i,j;
+float avg_w,avg_ta;
+printf("Enter number of process:");
+scanf("%d",&n); 
+printf("\nEnter Estimated Time:\n");
+
+for(i=0;i<n;i++)
+{
+printf("p%d:",i+1);
+scanf("%d",&burst[i]);
+p[i]=i+1;  
+} 
+
+for(i=0;i<n;i++)
+{
+pos=i;
+for(j=i+1;j<n;j++)
+{
+if(burst[j]<burst[pos])
+pos=j;
+} 
+temp=burst[i];
+burst[i]=burst[pos];
+burst[pos]=temp; 
+temp=p[i];
+p[i]=p[pos];
+p[pos]=temp;
+} 
+waiting[0]=0;
+for(i=1;i<n;i++)
+{
+waiting[i]=0;
+for(j=0;j<i;j++)
+waiting[i]+=burst[j];
+total+=waiting[i];
+} 
+avg_w=(float)total/n;
+total=0; 
+printf("\nProcess\t Estimated Time \tWaiting Time\tTurnaround Time");
+for(i=0;i<n;i++)
+{
+turnat[i]=burst[i]+waiting[i];       
+total+=turnat[i];
+printf("\np%d\t\t %d\t\t %d\t\t\t%d",p[i],burst[i],waiting[i],turnat[i]);
+} 
+avg_ta=(float)total/n; //average turnaround time
+printf("\n\nAverage Waiting Time=%f",avg_w);
+printf("\nAverage Turnaround Time=%f\n",avg_ta);
+}
